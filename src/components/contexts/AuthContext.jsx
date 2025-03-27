@@ -21,14 +21,37 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const signUp = useCallback(async ( userData) => {
+  const signUp = useCallback(async (username, email, password) => {
     try {
-      const response = await axios.post(`https://sms-colp.onrender.com/register/admin`, userData);
+      const response = await axios.post(
+        `https://sms-colp.onrender.com/register/admin`,
+        {
+          username: username,  // Send with the expected key
+          useremail: email,    // Send with the expected key
+          userpassword: password // Send with the expected key
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
       
       if (response.status === 200) {
-        // Save user data to local DB if needed
-        const userWithRole = { ...userData, role, id: response.data.user_id };
-        await db.users.add(userWithRole);
+        const user = {
+          username,
+          email,
+          role: response.data.role || 'admin', // default if not provided
+          token: response.data.access_token    // if provided
+        };
+        
+        // Update state and local storage
+        setCurrentUser(user);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        
+        // Save to local DB if needed
+        await db.users.add(user);
+        
         return response.data;
       }
     } catch (error) {
