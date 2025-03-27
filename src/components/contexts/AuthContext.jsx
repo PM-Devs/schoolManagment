@@ -27,8 +27,8 @@ export const AuthProvider = ({ children }) => {
         `https://sms-colp.onrender.com/register/admin`,
         {
           username: username,  // Send with the expected key
-          useremail: email,    // Send with the expected key
-          userpassword: password // Send with the expected key
+          email: email,    // Send with the expected key
+          password: password // Send with the expected key
         },
         {
           headers: {
