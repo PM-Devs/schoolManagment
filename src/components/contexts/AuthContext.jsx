@@ -21,9 +21,9 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const signUp = useCallback(async (role, userData) => {
+  const signUp = useCallback(async ( userData) => {
     try {
-      const response = await axios.post(`https://sms-colp.onrender.com/register/${role}`, userData);
+      const response = await axios.post(`https://sms-colp.onrender.com/register/admin`, userData);
       
       if (response.status === 200) {
         // Save user data to local DB if needed
